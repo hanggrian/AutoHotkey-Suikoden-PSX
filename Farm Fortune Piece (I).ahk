@@ -1,6 +1,6 @@
 ; Script to farm Fortune Rune Piece.
-; Location	: Big Wheel in Kouan
-; Speed		: >300 FPS
+; Location : Big Wheel in Kouan
+; Speed    : >300 FPS
 
 #include libs/core.ahk
 #maxThreadsPerHotkey 2
@@ -25,21 +25,21 @@ Backspace::
     } else {
       if (counter < 5) {
         counter++
-        move(DUP, 100)
+        move(dup, 100)
       } else {
         counter := 0
-        move(DDOWN, 200)
+        move(ddown, 200)
       }
     }
   }
   return
 
 move(direction, duration) {
-  send {%CIRCLE% down}
+  send {%circle% down}
 
   send {%direction% down}
   sleep duration
   send {%direction% up}
 
-  send {%CIRCLE% up}
+  send {%circle% up}
 }

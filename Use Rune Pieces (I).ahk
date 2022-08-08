@@ -1,7 +1,7 @@
 ; Script to abuse stat stone glitch, party characters must all have 3 balloons.
 ; For a character that has fixed equipment, put him/her on 4th position and change mode using NumpadDot.
-; Location	: Soniere Prison save point
-; Speed		: >300 FPS
+; Location : Soniere Prison save point
+; Speed    : >300 FPS
 
 #include libs/core.ahk
 
@@ -54,12 +54,12 @@ msgBox % "```tToggle Suikoden 1 or 2.`n"
 ; Fallback function if haven't encountered enemies.
 0::
   loop 3 {
-    send {%CIRCLE% down}
-    send {%CIRCLE% up}
+    send {%circle% down}
+    send {%circle% up}
   }
 
-  moveTwice(DLEFT, DRIGHT, 150)
-  moveTwice(DRIGHT, DLEFT, 150)
+  moveTwice(dleft, dright, 150)
+  moveTwice(dright, dleft, 150)
 
   resetToCheckpoint()
   return
@@ -67,44 +67,44 @@ msgBox % "```tToggle Suikoden 1 or 2.`n"
 ; Use n-items from 1st character to self or 4th character, depending on mode.
 useStatStones(itemCount) {
   ; Open menu.
-  send {%SQUARE% down}
-  send {%SQUARE% up}
+  send {%square% down}
+  send {%square% up}
 
   toSelf := getPreference("UseRunePieces", "ToSelf")
   loop %itemCount% {
     ; Menu 1> items 2> characters 3> item 4> use.
     loop 4 {
-      send {%CROSS% down}
-      send {%CROSS% up}
+      send {%cross% down}
+      send {%cross% up}
     }
     ; To 1st or 4th character.
     if (not toSelf) {
-      send {%DDOWN% down}
-      send {%DDOWN% up}
+      send {%ddown% down}
+      send {%ddown% up}
     }
     ; Character 1> confirm 2> close.
     loop 2 {
-      send {%CROSS% down}
-      send {%CROSS% up}
+      send {%cross% down}
+      send {%cross% up}
     }
   }
 
   ; Exit menu.
-  send {%SQUARE% down}
-  send {%SQUARE% up}
+  send {%square% down}
+  send {%square% up}
 
-  moveTwice(DLEFT, DRIGHT, 150)
-  moveTwice(DRIGHT, DLEFT, 150)
+  moveTwice(dleft, dright, 150)
+  moveTwice(dright, dleft, 150)
 
   resetToCheckpoint()
 }
 
 resetToCheckpoint() {
   loop 2 {
-    send {%CROSS% down}
-    send {%CROSS% up}
+    send {%cross% down}
+    send {%cross% up}
   }
   sleep 500 ; defeat animation
-  send {%CROSS% down}
-  send {%CROSS% up}
+  send {%cross% down}
+  send {%cross% up}
 }

@@ -1,7 +1,6 @@
 ; Script for leveling and looting regular enemies.
-; Written to work on all resolutions, but only tested with 640x480 window.
-; Location	: Any enemy spawn area with wide horizontal area
-; Speed		: >300 FPS
+; Location : Any enemy spawn area with wide horizontal area
+; Speed    : >300 FPS
 
 #include libs/core.ahk
 #maxThreadsPerHotkey 2
@@ -71,11 +70,11 @@ Backspace::
           }
         }
         ; Let go.
-        send {%DDOWN% down}
-        send {%DDOWN% up}
+        send {%ddown% down}
+        send {%ddown% up}
         loop 3 {
-          send {%CROSS% down}
-          send {%CROSS% up}
+          send {%cross% down}
+          send {%cross% up}
         }
       }
     } else if (scanFinish()) {
@@ -90,12 +89,12 @@ Backspace::
         finish()
       }
     } else {
-      moveTwice(DLEFT, DRIGHT, 100)
+      moveTwice(dleft, dright, 100)
     }
   }
   return
 
 isEnemyFound(colorX, colorY) {
   PixelGetColor, color, colorX, colorY
-  return color = 0xFEFEFE
+  return color = currentEnemyColor
 }
