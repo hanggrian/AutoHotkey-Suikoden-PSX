@@ -1,4 +1,8 @@
-; Script for leveling and looting regular enemies.
+; Run around to encounter enemies and fight.
+; When targeted mode is enabled, the script will only fight enemies with registered coordinates,
+; which is helpful when looting certain items.
+;
+; Game     : S1 & S2
 ; Location : Any enemy spawn area with wide horizontal area
 ; Speed    : >300 FPS
 
@@ -69,23 +73,34 @@ Backspace::
             break
           }
         }
-        ; Let go.
+        ; Select Let Go.
         send {%ddown% down}
         send {%ddown% up}
-        loop 3 {
+        send {%cross% down}
+        send {%cross% up}
+        ; Wait for dialog animation and close, extra loop to avoid hanging.
+        loop 2 {
+          sleep 100
           send {%cross% down}
           send {%cross% up}
         }
       }
     } else if (scanFinish()) {
       if (s2) {
-        ; Party members lv 1> exp gained 2> money gained 3> item gained
-        ; 4> give up on item (if full) 5> close 6> just to be sure.
-        loop 6 {
+        ; Party members lv 1> exp gained 2> money gained.
+        loop 2 {
           finish()
         }
+        ; Money gained 1> item gained 2> give up on item (if full) 3> close.
+        loop 3 {
+          sleep 100
+          finish()
+        }
+        ; Hanging item gained hotfix.
+        send {%triangle% down}
+        send {%triangle% up}
       } else {
-        ; In S1, money and item gained box is the same, so no need for looping.
+        ; No need for looping in S1 because money and item gained box is the same.
         finish()
       }
     } else {

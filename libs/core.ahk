@@ -1,8 +1,3 @@
-; Moves selection 1> auto 2> confirm.
-global S1_FIGHT_CROSSTIMES=2
-; S2 runs on slower fps, so add 2 extra times to ensure the script does not stop in confirmation
-global S2_FIGHT_CROSSTIMES=4
-
 global dup := getPreference("Controls", "DUp")
 global dleft := getPreference("Controls", "DLeft")
 global ddown := getPreference("Controls", "DDown")
@@ -30,13 +25,11 @@ prepareScan() {
     currentFightColor := getPreference("Scans", "S2FightColor")
     currentFinishCoordinate := getPreference("Scans", "S2FinishCoordinate")
     currentFinishColor := getPreference("Scans", "S2FinishColor")
-    currentFightCrossTimes := S2_FIGHT_CROSSTIMES
   } else {
     currentFightCoordinate := getPreference("Scans", "S1FightCoordinate")
     currentFightColor := getPreference("Scans", "S1FightColor")
     currentFinishCoordinate := getPreference("Scans", "S1FinishCoordinate")
     currentFinishColor := getPreference("Scans", "S1FinishColor")
-    currentFightCrossTimes := S1_FIGHT_CROSSTIMES
   }
   StringSplit, coordinate, currentFightCoordinate, `,
   currentFightX := coordinate1
@@ -57,9 +50,15 @@ scanFinish() {
 }
 
 fight() {
+  ; Select Free Will/Auto.
   send {%dup% down}
   send {%dup% up}
-  loop %currentFightCrossTimes% {
+  send {%cross% down}
+  send {%cross% up}
+
+  ; Wait for dialog animation and confirm, extra loop to avoid hanging.
+  loop 2 {
+    sleep 100
     send {%cross% down}
     send {%cross% up}
   }

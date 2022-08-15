@@ -1,4 +1,7 @@
-; Script to farm Fortune Rune Piece.
+; Roll the dice and fight scripted enemies.
+; When the counter reaches 5, turn back to original point (in case of reaching Kirinji).
+;
+; Game     : S1
 ; Location : Big Wheel in Kouan
 ; Speed    : >300 FPS
 
@@ -7,7 +10,6 @@
 
 msgBox % "Backspace`tToggle on/off."
 
-; Roll the dice 5 times and rollback if reached Kirinji.
 Backspace::
   toggle := !toggle
   if (toggle) {
