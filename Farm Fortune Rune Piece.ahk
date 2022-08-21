@@ -5,38 +5,43 @@
 ; Location : Big Wheel in Kouan
 ; Speed    : >300 FPS
 
+msgBox % "Backspace`tToggle on/off."
+
+#noEnv
 #include libs/core.ahk
 #maxThreadsPerHotkey 2
-
-msgBox % "Backspace`tToggle on/off."
+#singleInstance force
 
 Backspace::
   toggle := !toggle
   if (toggle) {
-    prepareScan()
+    prepareScanStateS1()
     counter := 0
   }
   loop {
     if (not toggle) {
       break
     }
-    if (scanFight()) {
-      fight()
-    } else if (scanFinish()) {
-      finish()
+
+    if (isFightState()) {
+      doFight()
+    } else if (isFinishState()) {
+      doFinishS1()
+    } else if (isFallbackState()) {
+      doFallbackS1()
     } else {
       if (counter < 5) {
         counter++
-        move(dup, 100)
+        doMove(dup, 100)
       } else {
         counter := 0
-        move(ddown, 200)
+        doMove(ddown, 200)
       }
     }
   }
   return
 
-move(direction, duration) {
+doMove(direction, duration) {
   send {%circle% down}
 
   send {%direction% down}

@@ -6,18 +6,16 @@
 ; Location : Any enemy spawn area with wide horizontal area
 ; Speed    : >300 FPS
 
-#include libs/core.ahk
-#maxThreadsPerHotkey 2
-
 msgBox % "```t`tToggle Suikoden 1 or 2.`n"
   . "-`t`tToggle fight all or targeted enemies.`n"
   . "=`t`tChange enemy coordinates for targeted enemies.`n"
   . "+`t`tTest enemy coordinates.`n"
-  . "Backspace`tToggle fight."
+  . "Backspace`tToggle on/off."
 
-`::
-  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
-  return
+#noEnv
+#include libs/commons.ahk
+#maxThreadsPerHotkey 2
+#singleInstance force
 
 -::
   toggleModePreference("Fight", "Targeted", "Targeted enemies.", "All enemies.")
@@ -50,9 +48,8 @@ msgBox % "```t`tToggle Suikoden 1 or 2.`n"
 Backspace::
   toggle := !toggle
   if (toggle) {
-    prepareScan()
+    prepareScanState()
   }
-  s2 := getPreference("General", "S2")
   targeted := getPreference("Fight", "Targeted")
   if (targeted) {
     enemyCoordinates := getPreference("Fight", "EnemyCoordinates")
@@ -62,49 +59,34 @@ Backspace::
     if (not toggle) {
       break
     }
-    if (scanFight()) {
+
+    if (isFightState()) {
       if (not targeted) {
-        fight()
+        doFight()
       } else {
         loop %coordinates0% {
           StringSplit, coordinate, coordinates%A_Index%, `,
           if (isEnemyFound(coordinate1, coordinate2)) {
-            fight()
+            doFight()
             break
           }
         }
-        ; Select Let Go.
+        ; Select Let Go
         send {%ddown% down}
         send {%ddown% up}
         send {%cross% down}
         send {%cross% up}
-        ; Wait for dialog animation and close, extra loop to avoid hanging.
-        loop 2 {
-          sleep 100
-          send {%cross% down}
-          send {%cross% up}
-        }
+        ; Wait for dialog animation and close
+        sleep 100
+        send {%cross% down}
+        send {%cross% up}
       }
-    } else if (scanFinish()) {
-      if (s2) {
-        ; Party members lv 1> exp gained 2> money gained.
-        loop 2 {
-          finish()
-        }
-        ; Money gained 1> item gained 2> give up on item (if full) 3> close.
-        loop 3 {
-          sleep 100
-          finish()
-        }
-        ; Hanging item gained hotfix.
-        send {%triangle% down}
-        send {%triangle% up}
-      } else {
-        ; No need for looping in S1 because money and item gained box is the same.
-        finish()
-      }
+    } else if (isFinishState()) {
+      doFinish()
+    } else if (isFallbackState()) {
+      doFallback()
     } else {
-      moveTwice(dleft, dright, 100)
+      doMoveAround(dleft, dright, 100)
     }
   }
   return
