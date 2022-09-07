@@ -1,3 +1,5 @@
+; Core library is the base of all scripts.
+
 #noEnv
 
 global dup := getPreference("Controls", "DUp")
@@ -18,10 +20,9 @@ global currentFinishX
 global currentFinishY
 global currentFinishColor
 
-prepareScanStateS1() {
+initializeS1() {
   currentEnemyColor := getPreference("Scans", "EnemyColor")
   currentFallbackCounter := 0
-
   currentFightCoordinate := getPreference("Scans", "S1FightCoordinate")
   currentFightColor := getPreference("Scans", "S1FightColor")
   currentFinishCoordinate := getPreference("Scans", "S1FinishCoordinate")
@@ -34,10 +35,9 @@ prepareScanStateS1() {
   currentFinishY := coordinate2
 }
 
-prepareScanStateS2() {
+initializeS2() {
   currentEnemyColor := getPreference("Scans", "EnemyColor")
   currentFallbackCounter := 0
-
   currentFightCoordinate := getPreference("Scans", "S2FightCoordinate")
   currentFightColor := getPreference("Scans", "S2FightColor")
   currentFinishCoordinate := getPreference("Scans", "S2FinishCoordinate")
@@ -62,7 +62,7 @@ isFinishState() {
 
 isFallbackState() {
   currentFallbackCounter++
-  if (currentFallbackCounter > 10) {
+  if (currentFallbackCounter > 50) {
     currentFallbackCounter := 0
     return true
   }
@@ -70,31 +70,30 @@ isFallbackState() {
 }
 
 doFight() {
-  ; Select Free Will/Auto
+  ; Select Free Will/Auto.
   send {%dup% down}
   send {%dup% up}
   send {%cross% down}
   send {%cross% up}
-
-  ; Wait for dialog animation and confirm
+  ; Wait for dialog animation and confirm.
   sleep 100
   send {%cross% down}
   send {%cross% up}
 }
 
 doFinishS1() {
-  ; No need for looping in S1 because money and item gained box is the same
+  ; No need for looping in S1 because money and item gained box is the same.
   send {%cross% down}
   send {%cross% up}
 }
 
 doFinishS2() {
-  ; Party members lv 1> exp gained 2> money gained
+  ; Party members lv 1> exp gained 2> money gained.
   loop 2 {
     send {%cross% down}
     send {%cross% up}
   }
-  ; Money gained 1> item gained 2> give up on item (if full) 3> close
+  ; Money gained 1> item gained 2> give up on item (if full) 3> close.
   loop 3 {
     sleep 100
     send {%cross% down}
@@ -103,26 +102,37 @@ doFinishS2() {
 }
 
 doFallbackS1() {
-  send {%circle% down}
-  send {%circle% up}
+  ; Escape/bribe confirmation dialog cannot be dismissed with back button.
+  send {%cross% down}
+  send {%cross% up}
+  ; Back button for closing any other dialogs.
+  loop 2 {
+    send {%circle% down}
+    send {%circle% up}
+  }
 }
 
 doFallbackS2() {
-  send {%triangle% down}
-  send {%triangle% up}
+  ; Escape/bribe confirmation dialog cannot be dismissed with back button.
+  send {%cross% down}
+  send {%cross% up}
+  ; Back button for closing any other dialogs.
+  loop 2 {
+    send {%triangle% down}
+    send {%triangle% up}
+  }
 }
 
-doMoveAround(direction1, direction2, duration) {
+doMoveAround(duration) {
+  ; Run to direction left.
   send {%circle% down}
-
-  send {%direction1% down}
+  send {%dleft% down}
   sleep duration
-  send {%direction1% up}
-
-  send {%direction2% down}
+  send {%dleft% up}
+  ; Return to initial position and stop run.
+  send {%dright% down}
   sleep duration
-  send {%direction2% up}
-
+  send {%dright% up}
   send {%circle% up}
 }
 

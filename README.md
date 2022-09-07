@@ -1,16 +1,18 @@
 # AutoHotkey Suikoden PSX
 
-![Suikoden 2 preview.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/preview.gif)
+![Fight.ahk preview on Suikoden 2.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/preview.gif)
 
 AutoHotkey scripts for Suikoden 1 and 2.
+For when you want to maximize all characters' level and stats without GameShark.
 
 ## Install
 
-Configure `preferences.ini`, specifically section `Controls` and `Scans`.
+Configure 2 sections of `preferences.ini`.
 
 ### Controls
 
-Only D-pad and geometric shape buttons are relevant.
+Enter gamepad key bindings in this section.
+Avoid using uppercase letters, as the Shift key will also be triggered by AutoHotkey.
 
 ```
 [Controls]
@@ -44,11 +46,12 @@ S2FinishColor=0xfefefe
 
 |  | Screenshot | Note |
 |---|---|---|
-| S1 Fight | ![Scan area of Suikoden 1 fight state.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s1_fight.png) | Any border of the boxes showing party members, enemies, or moves. |
-| S1 Finish | ![Scan area of Suikoden 1 finish state.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s1_finish.png) | Any border of center box showing money and item gained. |
-| S2 Fight | ![Scan area of Suikoden 2 fight state.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s2_fight.png) | Any border of the boxes showing party members, enemies, or moves. |
-| S2 Finish | ![Scan area of Suikoden 2 finish state.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s2_finish.png) | First `Lv` text of top-left box showing character exp gained. |
+| S1 Fight | ![Fight state scan target of Suikoden 1.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s1_fight.png) | Any border of the boxes showing party members, enemies, or moves. |
+| S1 Finish | ![Finish state scan target of Suikoden 1.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s1_finish.png) | Any border of center box showing money and item gained. |
+| S2 Fight | ![Fight state scan target of Suikoden 2.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s2_fight.png) | Any border of the boxes showing party members, enemies, or moves. |
+| S2 Finish | ![Finish state scan target of Suikoden 2.](https://github.com/hendraanggrian/AutoHotkey-Suikoden-PSX/raw/assets/s2_finish.png) | First `Lv` text of top-left box showing character exp gained. |
 
 # Usage
 
+All of the runnable scripts are semi-automatic triggered by keystroke.
 Run the script and read the instruction in the initial message box.

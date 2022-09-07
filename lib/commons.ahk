@@ -1,15 +1,20 @@
+; Commons library is used for when a script supports both S1 and S2.
+
 #noEnv
-#include libs/core.ahk
+#include lib/core.ahk
+
+`::
+  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
+  return
 
 global currentS2 := getPreference("General", "S2")
 
-; Call this once before calling any other scan functions
-prepareScanState() {
+initialize() {
   currentS2 := getPreference("General", "S2")
   if (not currentS2) {
-    prepareScanStateS1()
+    initializeS1()
   } else {
-    prepareScanStateS2()
+    initializeS2()
   }
 }
 
@@ -28,7 +33,3 @@ doFallback() {
     doFallbackS2()
   }
 }
-
-`::
-  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
-  return

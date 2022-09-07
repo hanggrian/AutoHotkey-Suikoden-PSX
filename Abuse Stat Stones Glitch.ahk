@@ -15,12 +15,15 @@
 ; Location : Soniere Prison save point
 ; Speed    : >300 FPS
 
-msgBox % "```t`tToggle Suikoden 1 or 2.`n"
-  . "-`t`tToggle use to 1st or 2nd character.`n"
-  . "Backspace`tToggle on/off."
+Menu, Tray, Icon, res/icon_s2_off.ico
+MsgBox,, % "Abuse Stat Stones Glitch (S1 & S2)"
+  , % "Controls:`n"
+    . "```t`tToggle Suikoden 1 or 2.`n"
+    . "-`t`tToggle use to 1st or 2nd character.`n"
+    . "Backspace`tToggle on/off."
 
 #noEnv
-#include libs/commons.ahk
+#include lib/commons.ahk
 #maxThreadsPerHotkey 2
 #singleInstance force
 
@@ -31,15 +34,17 @@ msgBox % "```t`tToggle Suikoden 1 or 2.`n"
 Backspace::
   toggle := !toggle
   if (toggle) {
-    prepareScanState()
+    Menu, Tray, Icon, res/icon_s2_on.ico
+    initialize()
+    toSecond := getPreference("AbuseStatStonesGlitch", "ToSecond")
   }
-  toSecond := getPreference("AbuseStatStonesGlitch", "ToSecond")
   loop {
     if (not toggle) {
+      Menu, Tray, Icon, res/icon_s2_off.ico
       break
     }
 
-    ; Open menu
+    ; Open menu.
     send {%square% down}
     send {%square% up}
 
@@ -51,61 +56,61 @@ Backspace::
         send {%cross% up}
       }
       loop 9 {
-        ; Item 1> use 2> character
+        ; Item 1> use 2> character.
         loop 2 {
           send {%cross% down}
           send {%cross% up}
         }
-        ; To 1st or 4th character
+        ; To 1st or 4th character.
         if (toSecond) {
           send {%ddown% down}
           send {%ddown% up}
         }
-        ; Character 1> confirm
+        ; Character 1> confirm.
         send {%cross% down}
         send {%cross% up}
-        ; Stats raised information
+        ; Stats raised information.
         sleep 100
       }
-      ; Close menu of any depth
+      ; Close menu of any depth.
       loop 4 {
         send {%triangle% down}
         send {%triangle% up}
       }
     } else {
-      ; In S1, menu goes back to root whenever stone is used
+      ; In S1, menu goes back to root whenever stone is used.
       loop 9 {
-        ; Menu 1> items 2> characters 3> item 4> use
+        ; Menu 1> items 2> characters 3> item 4> use.
         loop 4 {
           send {%cross% down}
           send {%cross% up}
         }
-        ; To 1st or 4th character
+        ; To 1st or 4th character.
         if (toSecond) {
           send {%dright% down}
           send {%dright% up}
         }
-        ; Character 1> confirm 2> close
+        ; Character 1> confirm 2> close.
         loop 2 {
           send {%cross% down}
           send {%cross% up}
         }
       }
-      ; Close menu of any depth
+      ; Close menu of any depth.
       loop 4 {
         send {%circle% down}
         send {%circle% up}
       }
     }
 
-    ; Purposely lose fight until game over
+    ; Purposely lose fight until game over.
     doMoveAndLose(toggle)
     while (isFinishState() && toggle) {
       doFinish()
       doMoveAndLose(toggle)
     }
 
-    ; Choose try again and wait for revive delay
+    ; Choose try again and wait for revive delay.
     send {%cross% down}
     send {%cross% up}
     sleep 1000
@@ -113,9 +118,9 @@ Backspace::
   return
 
 doMoveAndLose(toggle) {
-  ; Move around until enemies encounter
+  ; Move around until enemies encounter.
   while (not isFightState() && toggle) {
-    doMoveAround(dleft, dright, 200)
+    doMoveAround(200)
   }
 
   if (currentS2) {
@@ -129,7 +134,7 @@ doMoveAndLose(toggle) {
     }
     sleep 700
   } else {
-    ; With baloon glitch, any fight is always lost
+    ; With baloon glitch, any fight is always lost.
     loop 2 {
       send {%cross% down}
       send {%cross% up}

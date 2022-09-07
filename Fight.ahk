@@ -6,14 +6,17 @@
 ; Location : Any enemy spawn area with wide horizontal area
 ; Speed    : >300 FPS
 
-msgBox % "```t`tToggle Suikoden 1 or 2.`n"
-  . "-`t`tToggle fight all or targeted enemies.`n"
-  . "=`t`tChange enemy coordinates for targeted enemies.`n"
-  . "+`t`tTest enemy coordinates.`n"
-  . "Backspace`tToggle on/off."
+Menu, Tray, Icon, res/icon_s2_off.ico
+MsgBox,, % "Fight (S1 & S2)"
+  , % "Controls:`n"
+    . "```t`tToggle Suikoden 1 or 2.`n"
+    . "-`t`tToggle fight all or targeted enemies.`n"
+    . "=`t`tChange enemy coordinates for targeted enemies.`n"
+    . "+`t`tTest enemy coordinates.`n"
+    . "Backspace`tToggle on/off."
 
 #noEnv
-#include libs/commons.ahk
+#include lib/commons.ahk
 #maxThreadsPerHotkey 2
 #singleInstance force
 
@@ -48,15 +51,17 @@ msgBox % "```t`tToggle Suikoden 1 or 2.`n"
 Backspace::
   toggle := !toggle
   if (toggle) {
-    prepareScanState()
-  }
-  targeted := getPreference("Fight", "Targeted")
-  if (targeted) {
-    enemyCoordinates := getPreference("Fight", "EnemyCoordinates")
-    StringSplit, coordinates, enemyCoordinates, %A_Space%
+    Menu, Tray, Icon, res/icon_s2_on.ico
+    initialize()
+    targeted := getPreference("Fight", "Targeted")
+    if (targeted) {
+      enemyCoordinates := getPreference("Fight", "EnemyCoordinates")
+      StringSplit, coordinates, enemyCoordinates, %A_Space%
+    }
   }
   loop {
     if (not toggle) {
+      Menu, Tray, Icon, res/icon_s2_off.ico
       break
     }
 
@@ -71,12 +76,12 @@ Backspace::
             break
           }
         }
-        ; Select Let Go
+        ; If not found, escape fight.
         send {%ddown% down}
         send {%ddown% up}
         send {%cross% down}
         send {%cross% up}
-        ; Wait for dialog animation and close
+        ; Wait for dialog animation and close.
         sleep 100
         send {%cross% down}
         send {%cross% up}
@@ -86,7 +91,7 @@ Backspace::
     } else if (isFallbackState()) {
       doFallback()
     } else {
-      doMoveAround(dleft, dright, 100)
+      doMoveAround(100)
     }
   }
   return

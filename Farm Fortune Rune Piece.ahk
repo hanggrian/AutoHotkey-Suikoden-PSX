@@ -5,21 +5,26 @@
 ; Location : Big Wheel in Kouan
 ; Speed    : >300 FPS
 
-msgBox % "Backspace`tToggle on/off."
+Menu, Tray, Icon, res/icon_s1_off.ico
+MsgBox,, % "Farm Fortune Rune Piece (S1)"
+  , % "Controls:`n"
+    . "Backspace`tToggle on/off."
 
 #noEnv
-#include libs/core.ahk
+#include lib/core.ahk
 #maxThreadsPerHotkey 2
 #singleInstance force
 
 Backspace::
   toggle := !toggle
   if (toggle) {
-    prepareScanStateS1()
+    Menu, Tray, Icon, res/icon_s1_on.ico
+    initializeS1()
     counter := 0
   }
   loop {
     if (not toggle) {
+      Menu, Tray, Icon, res/icon_s1_off.ico
       break
     }
 
