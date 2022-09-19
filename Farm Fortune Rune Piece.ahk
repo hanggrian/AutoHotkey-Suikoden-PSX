@@ -1,5 +1,5 @@
 ; Roll the dice and fight scripted enemies.
-; When the counter reaches 5, turn back to original point (in case of reaching Kirinji).
+; After 5 iterations, return back to original point (in case of reaching Kirinji).
 ;
 ; Game     : S1
 ; Location : Big Wheel in Kouan

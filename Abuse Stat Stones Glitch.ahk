@@ -12,7 +12,7 @@
 ; Change mode to 2th for non-human characters.
 ;
 ; Game     : S1 & S2
-; Location : Soniere Prison save point
+; Location : Any enemy-spawn area with save point, Soniere Prison in S1 & Banner Pass in S2
 ; Speed    : >300 FPS
 
 Menu, Tray, Icon, res/icon_s2_off.ico

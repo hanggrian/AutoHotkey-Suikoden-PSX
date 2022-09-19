@@ -1,6 +1,6 @@
-; Kill highlands spawned by Rowd and refuse to jump indefinitely.
+; Kill highlands spawned by Rowd and repeatedly refuse to jump.
 ; After 108 iterations, a fabled colored intro should appear.
-; There is a risk of dying if Riou and Jowy are not at least level 3.
+; There is a risk of dying if Riou and Jowy are not at least level 3 at the start of the script.
 ;
 ; Game     : S2
 ; Location : Highland Camp prologue

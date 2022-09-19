@@ -23,31 +23,31 @@ global currentFinishColor
 initializeS1() {
   currentEnemyColor := getPreference("Scans", "EnemyColor")
   currentFallbackCounter := 0
-  currentFightCoordinate := getPreference("Scans", "S1FightCoordinate")
-  currentFightColor := getPreference("Scans", "S1FightColor")
-  currentFinishCoordinate := getPreference("Scans", "S1FinishCoordinate")
-  currentFinishColor := getPreference("Scans", "S1FinishColor")
-  StringSplit, coordinate, currentFightCoordinate, `,
+  currentFightPoint := getPreference("Scans", "S1FightPoint")
+  currentFinishPoint := getPreference("Scans", "S1FinishPoint")
+  StringSplit, coordinate, currentFightPoint, `,
   currentFightX := coordinate1
   currentFightY := coordinate2
-  StringSplit, coordinate, currentFinishCoordinate, `,
+  currentFightColor := coordinate3
+  StringSplit, coordinate, currentFinishPoint, `,
   currentFinishX := coordinate1
   currentFinishY := coordinate2
+  currentFinishColor := coordinate3
 }
 
 initializeS2() {
   currentEnemyColor := getPreference("Scans", "EnemyColor")
   currentFallbackCounter := 0
-  currentFightCoordinate := getPreference("Scans", "S2FightCoordinate")
-  currentFightColor := getPreference("Scans", "S2FightColor")
-  currentFinishCoordinate := getPreference("Scans", "S2FinishCoordinate")
-  currentFinishColor := getPreference("Scans", "S2FinishColor")
-  StringSplit, coordinate, currentFightCoordinate, `,
+  currentFightPoint := getPreference("Scans", "S2FightPoint")
+  currentFinishPoint := getPreference("Scans", "S2FinishPoint")
+  StringSplit, coordinate, currentFightPoint, `,
   currentFightX := coordinate1
   currentFightY := coordinate2
-  StringSplit, coordinate, currentFinishCoordinate, `,
+  currentFightColor := coordinate3
+  StringSplit, coordinate, currentFinishPoint, `,
   currentFinishX := coordinate1
   currentFinishY := coordinate2
+  currentFinishColor := coordinate3
 }
 
 isFightState() {

@@ -1,9 +1,15 @@
-; Run around to encounter enemies and fight.
-; When targeted mode is enabled, the script will only fight enemies with registered coordinates,
-; which is helpful when looting certain items.
+; Run around to fight encountered enemies. There are 2 modes of this script.
+;
+; `All` mode will fight any enemies and is intended to leveling.
+;
+; `Targeted` mode will only fight enemies with registered coordinates, which is helpful when looting certain items.
+; To use this mode, use `Window Spy` to the coordinate of white pixel in enemy name.
+; The coordinates registered for that specific enemy must not overlap with other enemies that can be found in that area.
+; For example, if the target enemy is `WildBoar` and `Wolf` is also found in the area,
+; the selected coordinate should be `Boar` since `Wild` may overlap with `Wolf`.
 ;
 ; Game     : S1 & S2
-; Location : Any enemy spawn area with wide horizontal area
+; Location : Any enemy-spawn area
 ; Speed    : >300 FPS
 
 Menu, Tray, Icon, res/icon_s2_off.ico
