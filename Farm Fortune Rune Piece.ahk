@@ -1,30 +1,28 @@
 ; Roll the dice and fight scripted enemies.
-; After 5 iterations, return back to original point (in case of reaching Kirinji).
+;
+; In case of reaching Kirinji, the game becomes stagnated.
+; But in this case, the fallback trigger is return to original point.
 ;
 ; Game     : S1
-; Location : Big Wheel in Kouan
-; Speed    : >300 FPS
+; Location : Just below entrance of Big Wheel in Kouan
 
-Menu, Tray, Icon, res/icon_s1_off.ico
+#include lib/core.ahk
+
+setIcon("icon_s1_off")
 MsgBox,, % "Farm Fortune Rune Piece (S1)"
   , % "Controls:`n"
     . "Backspace`tToggle on/off."
 
-#noEnv
-#include lib/core.ahk
-#maxThreadsPerHotkey 2
-#singleInstance force
-
 Backspace::
   toggle := !toggle
   if (toggle) {
-    Menu, Tray, Icon, res/icon_s1_on.ico
+    setIcon("icon_s1_on")
     initializeS1()
     counter := 0
   }
   loop {
     if (not toggle) {
-      Menu, Tray, Icon, res/icon_s1_off.ico
+      setIcon("icon_s1_off")
       break
     }
 
@@ -34,14 +32,9 @@ Backspace::
       doFinishS1()
     } else if (isFallbackState()) {
       doFallbackS1()
+      doMove(ddown, 200)
     } else {
-      if (counter < 5) {
-        counter++
-        doMove(dup, 100)
-      } else {
-        counter := 0
-        doMove(ddown, 200)
-      }
+      doMove(dup, 100)
     }
   }
   return

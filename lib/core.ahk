@@ -1,6 +1,8 @@
 ; Core library is the base of all scripts.
 
-#noEnv
+#noEnv ; generally better performance
+#singleInstance force ; faster testing
+#maxThreadsPerHotkey 2 ; required for toggle support
 
 global dup := getPreference("Controls", "DUp")
 global dleft := getPreference("Controls", "DLeft")
@@ -11,140 +13,149 @@ global circle := getPreference("Controls", "Circle")
 global cross := getPreference("Controls", "Cross")
 global square := getPreference("Controls", "Square")
 
-global currentEnemyColor := getPreference("Scans", "EnemyColor")
-global currentFallbackCounter := 0
-global currentFightX
-global currentFightY
-global currentFightColor
-global currentFinishX
-global currentFinishY
-global currentFinishColor
+global scanEnemyColor
+global scanFightX
+global scanFightY
+global scanFightColor
+global scanFinishX
+global scanFinishY
+global scanFinishColor
 
+global lastFallbackColor
+
+; Load scan properties of Suikoden 1.
 initializeS1() {
-  currentEnemyColor := getPreference("Scans", "EnemyColor")
-  currentFallbackCounter := 0
-  currentFightPoint := getPreference("Scans", "S1FightPoint")
-  currentFinishPoint := getPreference("Scans", "S1FinishPoint")
-  StringSplit, coordinate, currentFightPoint, `,
-  currentFightX := coordinate1
-  currentFightY := coordinate2
-  currentFightColor := coordinate3
-  StringSplit, coordinate, currentFinishPoint, `,
-  currentFinishX := coordinate1
-  currentFinishY := coordinate2
-  currentFinishColor := coordinate3
+  scanEnemyColor := getPreference("Scans", "EnemyColor")
+  scanFightPoint := getPreference("Scans", "S1FightPoint")
+  scanFinishPoint := getPreference("Scans", "S1FinishPoint")
+  StringSplit, coordinate, scanFightPoint, `,
+  scanFightX := coordinate1
+  scanFightY := coordinate2
+  scanFightColor := coordinate3
+  StringSplit, coordinate, scanFinishPoint, `,
+  scanFinishX := coordinate1
+  scanFinishY := coordinate2
+  scanFinishColor := coordinate3
 }
 
+; Load scan properties of Suikoden 2.
 initializeS2() {
-  currentEnemyColor := getPreference("Scans", "EnemyColor")
-  currentFallbackCounter := 0
-  currentFightPoint := getPreference("Scans", "S2FightPoint")
-  currentFinishPoint := getPreference("Scans", "S2FinishPoint")
-  StringSplit, coordinate, currentFightPoint, `,
-  currentFightX := coordinate1
-  currentFightY := coordinate2
-  currentFightColor := coordinate3
-  StringSplit, coordinate, currentFinishPoint, `,
-  currentFinishX := coordinate1
-  currentFinishY := coordinate2
-  currentFinishColor := coordinate3
+  scanEnemyColor := getPreference("Scans", "EnemyColor")
+  scanFightPoint := getPreference("Scans", "S2FightPoint")
+  scanFinishPoint := getPreference("Scans", "S2FinishPoint")
+  StringSplit, coordinate, scanFightPoint, `,
+  scanFightX := coordinate1
+  scanFightY := coordinate2
+  scanFightColor := coordinate3
+  StringSplit, coordinate, scanFinishPoint, `,
+  scanFinishX := coordinate1
+  scanFinishY := coordinate2
+  scanFinishColor := coordinate3
 }
 
+; Check if fight point is valid.
 isFightState() {
-  PixelGetColor, color, currentFightX, currentFightY
-  return color = currentFightColor
+  PixelGetColor, color, scanFightX, scanFightY
+  return color = scanFightColor
 }
 
+; Check if finish point is valid.
 isFinishState() {
-  PixelGetColor, color, currentFinishX, currentFinishY
-  return color = currentFinishColor
+  PixelGetColor, color, scanFinishX, scanFinishY
+  return color = scanFinishColor
 }
 
+; Check if the game has become stagnated, which usually happens in sudden FPS drop.
+; This is done by picking a color of any coordinate,
+; then later check if the color is still in that coordinate.
 isFallbackState() {
-  currentFallbackCounter++
-  if (currentFallbackCounter > 50) {
-    currentFallbackCounter := 0
+  PixelGetColor, color, scanFightX, scanFightY
+  if (color = lastFallbackColor) {
+    lastFallbackColor := ""
     return true
   }
+  lastFallbackColor := color
   return false
 }
 
+; In any fight state, select Free Will.
 doFight() {
-  ; Select Free Will/Auto.
   send {%dup% down}
   send {%dup% up}
   send {%cross% down}
   send {%cross% up}
-  ; Wait for dialog animation and confirm.
-  sleep 100
+
+  sleep 100 ; confirmation dialog animation
   send {%cross% down}
   send {%cross% up}
 }
 
+; In Suikoden 1 finish state, close all dialogs.
 doFinishS1() {
-  ; No need for looping in S1 because money and item gained box is the same.
+  ; no need for looping in S1 because money and item gained box is the same
+  sleep 100 ; money/item dialog animation
   send {%cross% down}
   send {%cross% up}
 }
 
+; In Suikoden 2 finish state, close all dialogs.
 doFinishS2() {
-  ; Party members lv 1> exp gained 2> money gained.
+  ; party members lv 1> exp gained 2> money gained
   loop 2 {
     send {%cross% down}
     send {%cross% up}
   }
-  ; Money gained 1> item gained 2> give up on item (if full) 3> close.
+  ; money gained 1> item gained 2> give up on item (if full) 3> close
   loop 3 {
-    sleep 100
+    sleep 100 ; money/item dialog animation
     send {%cross% down}
     send {%cross% up}
   }
 }
 
+; In Suikoden 1 stagnated state, press enter and back.
+; Enter is neccessary because escape/bribe confirmation dialog cannot be dismissed with back button.
 doFallbackS1() {
-  ; Escape/bribe confirmation dialog cannot be dismissed with back button.
   send {%cross% down}
   send {%cross% up}
-  ; Back button for closing any other dialogs.
-  loop 2 {
-    send {%circle% down}
-    send {%circle% up}
-  }
+  send {%circle% down}
+  send {%circle% up}
 }
 
+; In Suikoden 2 stagnated state, press enter and back.
+; Enter is neccessary because escape/bribe confirmation dialog cannot be dismissed with back button.
 doFallbackS2() {
-  ; Escape/bribe confirmation dialog cannot be dismissed with back button.
   send {%cross% down}
   send {%cross% up}
-  ; Back button for closing any other dialogs.
-  loop 2 {
-    send {%triangle% down}
-    send {%triangle% up}
-  }
+  send {%triangle% down}
+  send {%triangle% up}
 }
 
+; Run horizontally to encounter enemies.
 doMoveAround(duration) {
-  ; Run to direction left.
   send {%circle% down}
   send {%dleft% down}
   sleep duration
   send {%dleft% up}
-  ; Return to initial position and stop run.
+
   send {%dright% down}
   sleep duration
   send {%dright% up}
   send {%circle% up}
 }
 
+; Get value from an INI file.
 getPreference(section, key) {
   IniRead, value, preferences.ini, %section%, %key%
   return value
 }
 
+; Set value to an INI file.
 setPreference(section, key, value) {
   IniWrite, %value%, preferences.ini, %section%, %key%
 }
 
+; Toggle a boolean preference, also display an alert about current state.
 toggleModePreference(section, key, modeOnDesc, modeOffDesc) {
   value := getPreference(section, key)
   setPreference(section, key, !value)
@@ -153,4 +164,10 @@ toggleModePreference(section, key, modeOnDesc, modeOffDesc) {
   } else {
     msgBox Mode changed:`n%modeOffDesc%
   }
+}
+
+; Change icon in notification area.
+setIcon(file) {
+  path := format("res/{1}.ico", file)
+  Menu, Tray, Icon, %path%
 }

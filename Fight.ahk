@@ -1,18 +1,14 @@
-; Run around to fight encountered enemies. There are 2 modes of this script.
+; Run around to fight encountered enemies.
 ;
-; `All` mode will fight any enemies and is intended to leveling.
-;
-; `Targeted` mode will only fight enemies with registered coordinates, which is helpful when looting certain items.
-; To use this mode, use `Window Spy` to the coordinate of white pixel in enemy name.
-; The coordinates registered for that specific enemy must not overlap with other enemies that can be found in that area.
-; For example, if the target enemy is `WildBoar` and `Wolf` is also found in the area,
-; the selected coordinate should be `Boar` since `Wild` may overlap with `Wolf`.
+; When targeted mode is enabled, the script will only fight enemies with registered coordinates,
+; which is helpful when looting certain items.
 ;
 ; Game     : S1 & S2
-; Location : Any enemy-spawn area
-; Speed    : >300 FPS
+; Location : Any enemy-spawn area, preferably with wide horizontal area
 
-Menu, Tray, Icon, res/icon_s2_off.ico
+#include lib/commons.ahk
+
+setIconOff()
 MsgBox,, % "Fight (S1 & S2)"
   , % "Controls:`n"
     . "```t`tToggle Suikoden 1 or 2.`n"
@@ -21,13 +17,17 @@ MsgBox,, % "Fight (S1 & S2)"
     . "+`t`tTest enemy coordinates.`n"
     . "Backspace`tToggle on/off."
 
-#noEnv
-#include lib/commons.ahk
-#maxThreadsPerHotkey 2
-#singleInstance force
+global toggle
+
+`::
+  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
+  setIconOff()
+  toggle := false
+  return
 
 -::
   toggleModePreference("Fight", "Targeted", "Targeted enemies.", "All enemies.")
+  toggle := false
   return
 
 =::
@@ -57,7 +57,7 @@ MsgBox,, % "Fight (S1 & S2)"
 Backspace::
   toggle := !toggle
   if (toggle) {
-    Menu, Tray, Icon, res/icon_s2_on.ico
+    setIconOn()
     initialize()
     targeted := getPreference("Fight", "Targeted")
     if (targeted) {
@@ -67,7 +67,7 @@ Backspace::
   }
   loop {
     if (not toggle) {
-      Menu, Tray, Icon, res/icon_s2_off.ico
+      setIconOff()
       break
     }
 
@@ -82,12 +82,12 @@ Backspace::
             break
           }
         }
-        ; If not found, escape fight.
+        ; if not found, escape fight
         send {%ddown% down}
         send {%ddown% up}
         send {%cross% down}
         send {%cross% up}
-        ; Wait for dialog animation and close.
+        ; wait for dialog animation and close
         sleep 100
         send {%cross% down}
         send {%cross% up}
@@ -104,5 +104,5 @@ Backspace::
 
 isEnemyFound(colorX, colorY) {
   PixelGetColor, color, colorX, colorY
-  return color = currentEnemyColor
+  return color = scanEnemyColor
 }

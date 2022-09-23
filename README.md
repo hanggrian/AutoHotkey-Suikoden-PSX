@@ -53,3 +53,5 @@ A point in this INI file is 3 comma-separated values of X-coordinate, Y-coordina
 
 All of the runnable scripts are semi-automatic triggered by keystroke (mostly `Backspace`).
 Run the script and read the instruction in the initial message box.
+
+The only tested speed of these scripts are above 300 FPS.
