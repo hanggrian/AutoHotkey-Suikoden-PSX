@@ -39,6 +39,7 @@ global toggle
   return
 
 +::
+  initialize()
   enemyCoordinates := getPreference("Fight", "EnemyCoordinates")
   StringSplit, coordinates, enemyCoordinates, %A_Space%
   message := "Enemy colors:`n"

@@ -65,9 +65,8 @@ isFinishState() {
   return color = scanFinishColor
 }
 
-; Check if the game has become stagnated, which usually happens in sudden FPS drop.
-; This is done by picking a color of any coordinate,
-; then later check if the color is still in that coordinate.
+; Check if the game has become stagnated, which usually happens in sudden FPS drop. This is done by
+; picking a color of any coordinate, then later check if the color is still in that coordinate.
 isFallbackState() {
   PixelGetColor, color, scanFightX, scanFightY
   if (color = lastFallbackColor) {
@@ -113,8 +112,8 @@ doFinishS2() {
   }
 }
 
-; In Suikoden 1 stagnated state, press enter and back.
-; Enter is neccessary because escape/bribe confirmation dialog cannot be dismissed with back button.
+; In Suikoden 1 stagnated state, press enter and back. Enter is neccessary because escape/bribe
+; confirmation dialog cannot be dismissed with back button.
 doFallbackS1() {
   send {%cross% down}
   send {%cross% up}
@@ -122,8 +121,8 @@ doFallbackS1() {
   send {%circle% up}
 }
 
-; In Suikoden 2 stagnated state, press enter and back.
-; Enter is neccessary because escape/bribe confirmation dialog cannot be dismissed with back button.
+; In Suikoden 2 stagnated state, press enter and back. Enter is neccessary because escape/bribe
+; confirmation dialog cannot be dismissed with back button.
 doFallbackS2() {
   send {%cross% down}
   send {%cross% up}

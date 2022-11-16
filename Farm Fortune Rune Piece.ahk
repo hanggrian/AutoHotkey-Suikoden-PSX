@@ -1,7 +1,7 @@
 ; Roll the dice and fight scripted enemies.
 ;
-; In case of reaching Kirinji, the game becomes stagnated.
-; But in this case, the fallback trigger is return to original point.
+; In case of reaching Kirinji, the game becomes stagnated. But in this case, the fallback trigger is
+; return to original point.
 ;
 ; Game     : S1
 ; Location : Just below entrance of Big Wheel in Kouan
