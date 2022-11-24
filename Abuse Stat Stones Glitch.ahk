@@ -115,7 +115,7 @@ Backspace::
     ; choose try again and wait for revive delay
     send {%cross% down}
     send {%cross% up}
-    sleep 1000
+    sleep 2000
   }
   return
 
