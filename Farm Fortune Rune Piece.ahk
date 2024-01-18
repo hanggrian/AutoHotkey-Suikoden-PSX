@@ -6,45 +6,45 @@
 ; Game     : S1
 ; Location : Just below entrance of Big Wheel in Kouan
 
-#include lib/core.ahk
+#Include, libs/core.ahk
 
 setIcon("icon_s1_off")
 MsgBox,, % "Farm Fortune Rune Piece (S1)"
-  , % "Controls:`n"
-    . "Backspace`tToggle on/off."
+    , % "Controls:`n"
+        . "BackSpace`tToggle on/off."
 
-Backspace::
-  toggle := !toggle
-  if (toggle) {
-    setIcon("icon_s1_on")
-    initializeS1()
-    counter := 0
-  }
-  loop {
-    if (not toggle) {
-      setIcon("icon_s1_off")
-      break
+BackSpace::
+    toggle := !toggle
+    If (toggle) {
+        setIcon("icon_s1_on")
+        initializeS1()
+        counter := 0
     }
+    Loop {
+        If (Not toggle) {
+            setIcon("icon_s1_off")
+            Break
+        }
 
-    if (isFightState()) {
-      doFight()
-    } else if (isFinishState()) {
-      doFinishS1()
-    } else if (isFallbackState()) {
-      doFallbackS1()
-      doMove(ddown, 200)
-    } else {
-      doMove(dup, 100)
+        If (isFightState()) {
+            doFight()
+        } Else If (isFinishState()) {
+            doFinishS1()
+        } Else If (isFallbackState()) {
+            doFallbackS1()
+            doMove(ddown, 200)
+        } Else {
+            doMove(dup, 100)
+        }
     }
-  }
-  return
+    Return
 
 doMove(direction, duration) {
-  send {%circle% down}
+    Send, {%circle% Down}
 
-  send {%direction% down}
-  sleep duration
-  send {%direction% up}
+    Send, {%direction% Down}
+    Sleep, duration
+    Send, {%direction% Up}
 
-  send {%circle% up}
+    Send, {%circle% Up}
 }

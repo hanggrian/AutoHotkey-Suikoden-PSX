@@ -3,7 +3,7 @@
 ;
 ; In an attempt to get a different loot, a different scenario must occur. Within the emulator
 ; environment, repeatedly try to finish the enemy with different character. If no desired loot is
-; available, press `Backspace` to make the entire party skip moves to try again.
+; available, press `BackSpace` to make the entire party skip moves to try again.
 ;
 ; This script is particularly useful when trying to obtain loots from enemies that cannot be
 ; encountered using conventional `Fight.ahk` script, e.g.:
@@ -13,172 +13,173 @@
 ; Game     : S1 & S2
 ; Location : Any enemy-spawn area, preferably with wide horizontal area
 
-#include lib/commons.ahk
+#Include, libs/commons.ahk
 
 setIconOff()
 MsgBox,, % "Loot (S1 & S2)"
-  , % "Controls:`n"
-    . "```t`tToggle Suikoden 1 or 2.`n"
-    . "-`t`tChange party size.`n"
-    . "1`t`tSelect 1st character to attack.`n"
-    . "2`t`tSelect 2nd character to attack.`n"
-    . "3`t`tSelect 3rd character to attack.`n"
-    . "4`t`tSelect 4th character to attack.`n"
-    . "5`t`tSelect 5th character to attack.`n"
-    . "6`t`tSelect 6th character to attack.`n"
-    . "Backspace`tSkip all moves."
+    , % "Controls:`n"
+        . "```t`tToggle Suikoden 1 or 2.`n"
+        . "-`t`tChange party size.`n"
+        . "1`t`tSelect 1st character to attack.`n"
+        . "2`t`tSelect 2nd character to attack.`n"
+        . "3`t`tSelect 3rd character to attack.`n"
+        . "4`t`tSelect 4th character to attack.`n"
+        . "5`t`tSelect 5th character to attack.`n"
+        . "6`t`tSelect 6th character to attack.`n"
+        . "BackSpace`tSkip all moves."
 
 global partySize := getPreference("Loot", "PartySize")
-global running := false ; prevent while loop to be executed after moves are finished
+global running := False ; prevent while loop to be executed after moves are finished
 
 initialize()
 
 `::
-  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
-  initialize()
-  return
+    toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
+    initialize()
+    Return
 
 -::
-  partySize := getPreference("Loot", "PartySize")
-  InputBox, input, Enter Party Size, Currently party size is %partySize%.
-  if (not errorLevel) {
-    setPreference("Loot", "PartySize", input)
-  }
-  return
+    partySize := getPreference("Loot", "PartySize")
+    InputBox, input, % "Enter Party Size", % "Currently party size is " . partySize . "."
+        ,,,,,,,, %partySize%
+    If (Not ErrorLevel) {
+        setPreference("Loot", "PartySize", input)
+    }
+    Return
 
 1::
-  start()
-  attack()
-  times := getLastDefendTimes(1)
-  loop %times% {
-    defend()
-  }
-  finish()
-  return
+    start()
+    attack()
+    times := getLastDefendTimes(1)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 2::
-  start()
-  defend()
-  attack()
-  times := getLastDefendTimes(2)
-  loop %times% {
+    start()
     defend()
-  }
-  finish()
-  return
+    attack()
+    times := getLastDefendTimes(2)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 3::
-  start()
-  loop 2 {
-    defend()
-  }
-  attack()
-  times := getLastDefendTimes(3)
-  loop %times% {
-    defend()
-  }
-  finish()
-  return
+    start()
+    Loop, 2 {
+        defend()
+    }
+    attack()
+    times := getLastDefendTimes(3)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 4::
-  start()
-  loop 3 {
-    defend()
-  }
-  attack()
-  times := getLastDefendTimes(4)
-  loop %times% {
-    defend()
-  }
-  finish()
-  return
+    start()
+    Loop, 3 {
+        defend()
+    }
+    attack()
+    times := getLastDefendTimes(4)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 5::
-  start()
-  loop 4 {
-    defend()
-  }
-  attack()
-  times := getLastDefendTimes(5)
-  loop %times% {
-    defend()
-  }
-  finish()
-  return
+    start()
+    Loop, 4 {
+        defend()
+    }
+    attack()
+    times := getLastDefendTimes(5)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 6::
-  start()
-  loop 5 {
-    defend()
-  }
-  attack()
-  finish()
-  return
+    start()
+    Loop, 5 {
+        defend()
+    }
+    attack()
+    finish()
+    Return
 
-Backspace::
-  start()
-  times := getLastDefendTimes(0)
-  loop %times% {
-    defend()
-  }
-  finish()
-  return
+BackSpace::
+    start()
+    times := getLastDefendTimes(0)
+    Loop, %times% {
+        defend()
+    }
+    finish()
+    Return
 
 start() {
-  running := false
+    running := False
 
-  send {%cross% down}
-  send {%cross% up}
-  sleep 100
+    Send, {%cross% Down}
+    Send, {%cross% Up}
+    Sleep, 100
 }
 
 defend() {
-  send {%ddown% down}
-  send {%ddown% up}
-  send {%cross% down}
-  send {%cross% up}
+    Send, {%ddown% Down}
+    Send, {%ddown% Up}
+    Send, {%cross% Down}
+    Send, {%cross% Up}
 }
 
 attack() {
-  send {%cross% down}
-  send {%cross% up}
-  sleep 100
-  send {%cross% down}
-  send {%cross% up}
-  sleep 100
+    Send, {%cross% Down}
+    Send, {%cross% Up}
+    Sleep, 100
+    Send, {%cross% Down}
+    Send, {%cross% Up}
+    Sleep, 100
 }
 
 finish() {
-  sleep 100
-  send {%cross% down}
-  send {%cross% up}
+    Sleep, 100
+    Send, {%cross% Down}
+    Send, {%cross% Up}
 
-  running := true
-  waitCount := 0 ; in case the fight never ends, stop waiting after certain times
-  while (not isFinishState() && running && waitCount < 5) {
-    waitCount++
-    sleep 500
-  }
-
-  if (running) {
-    running := false
-
-    ; doFinish() will close all windows
-    ; instead, skip to parts where item is gained
-    loop 2 {
-      send {%cross% down}
-      send {%cross% up}
+    running := True
+    waitCount := 0 ; in case the fight never ends, stop waiting after certain times
+    While (Not isFinishState() And running And waitCount < 5) {
+        waitCount++
+        Sleep, 500
     }
-    sleep 100
-    send {%cross% down}
-    send {%cross% up}
-  }
+
+    If (running) {
+        running := False
+
+        ; doFinish() will close all windows
+        ; instead, skip to parts where item is gained
+        Loop, 2 {
+            Send, {%cross% Down}
+            Send, {%cross% Up}
+        }
+        Sleep, 100
+        Send, {%cross% Down}
+        Send, {%cross% Up}
+    }
 }
 
 getLastDefendTimes(attackIndex) {
-  times := partySize - attackIndex
-  if (times < 0) {
-    return 0
-  }
-  return times
+    times := partySize - attackIndex
+    If (times < 0) {
+        Return 0
+    }
+    Return times
 }

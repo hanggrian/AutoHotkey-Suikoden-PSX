@@ -11,136 +11,137 @@
 ; Game     : S1 & S2
 ; Location : Any enemy-spawn area with save point (e.g., Soniere Prison in S1, Banner Pass in S2)
 
-#include lib/commons.ahk
+#Include, libs/commons.ahk
 
 setIconOff()
 MsgBox,, % "Abuse Stat Stones Glitch (S1 & S2)"
-  , % "Controls:`n"
-    . "```t`tToggle Suikoden 1 or 2.`n"
-    . "-`t`tToggle use to 1st or 2nd character.`n"
-    . "Backspace`tToggle on/off."
+    , % "Controls:`n"
+        . "```t`tToggle Suikoden 1 or 2.`n"
+        . "-`t`tToggle use to 1st or 2nd character.`n"
+        . "BackSpace`tToggle on/off."
 
 global toggle
 
 `::
-  toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
-  setIconOff()
-  toggle := false
-  return
+    toggleModePreference("General", "S2", "Suikoden 2.", "Suikoden 1.")
+    setIconOff()
+    toggle := False
+    Return
 
 -::
-  toggleModePreference("AbuseStatStonesGlitch", "ToSecond", "To 2nd character.", "To 1st character.")
-  toggle := false
-  return
+    toggleModePreference("AbuseStatStonesGlitch"
+        , "ToSecond", "To 2nd character.", "To 1st character.")
+    toggle := False
+    Return
 
-Backspace::
-  toggle := !toggle
-  if (toggle) {
-    setIconOn()
-    initialize()
-    toSecond := getPreference("AbuseStatStonesGlitch", "ToSecond")
-  }
-  loop {
-    if (not toggle) {
-      setIconOff()
-      break
+BackSpace::
+    toggle := !toggle
+    If (toggle) {
+        setIconOn()
+        initialize()
+        toSecond := getPreference("AbuseStatStonesGlitch", "ToSecond")
     }
+    Loop {
+        If (not toggle) {
+            setIconOff()
+            Break
+        }
 
-    ; open menu
-    send {%square% down}
-    send {%square% up}
+        ; open menu
+        Send, {%square% Down}
+        Send, {%square% Up}
 
-    if (isS2) {
-      ; in S2, menu stays in party inventory whenever stone is used
-      ; menu 1> items 2> party's
-      loop 2 {
-        send {%cross% down}
-        send {%cross% up}
-      }
-      loop 9 {
-        ; item 1> use 2> character
-        loop 2 {
-          send {%cross% down}
-          send {%cross% up}
+        If (isS2) {
+            ; in S2, menu stays in party inventory whenever stone is used
+            ; menu 1> items 2> party's
+            Loop, 2 {
+                Send, {%cross% Down}
+                Send, {%cross% Up}
+            }
+            Loop, 9 {
+                ; item 1> use 2> character
+                Loop, 2 {
+                    Send, {%cross% Down}
+                    Send, {%cross% Up}
+                }
+                ; to 1st or 4th character
+                If (toSecond) {
+                    Send, {%ddown% Down}
+                    Send, {%ddown% Up}
+                }
+                ; character 1> confirm
+                Send, {%cross% Down}
+                Send, {%cross% Up}
+                ; stats raised information
+                Sleep, 100
+            }
+            ; close menu of any depth
+            Loop, 4 {
+                Send, {%triangle% Down}
+                Send, {%triangle% Up}
+            }
+        } Else {
+            ; in S1, menu goes back to root whenever stone is used
+            Loop, 9 {
+                ; menu 1> items 2> characters 3> item 4> use
+                Loop, 4 {
+                    Send, {%cross% Down}
+                    Send, {%cross% Up}
+                }
+                ; to 1st or 4th character
+                If (toSecond) {
+                    Send, {%dright% Down}
+                    Send, {%dright% Up}
+                }
+                ; character 1> confirm 2> close
+                Loop, 2 {
+                    Send, {%cross% Down}
+                    Send, {%cross% Up}
+                }
+            }
+            ; close menu of any depth
+            Loop, 4 {
+                Send, {%circle% Down}
+                Send, {%circle% Up}
+            }
         }
-        ; to 1st or 4th character
-        if (toSecond) {
-          send {%ddown% down}
-          send {%ddown% up}
+
+        ; purposely lose fight until game over
+        doMoveAndLose(toggle)
+        While (isFinishState() And toggle) {
+            doFinish()
+            doMoveAndLose(toggle)
         }
-        ; character 1> confirm
-        send {%cross% down}
-        send {%cross% up}
-        ; stats raised information
-        sleep 100
-      }
-      ; close menu of any depth
-      loop 4 {
-        send {%triangle% down}
-        send {%triangle% up}
-      }
-    } else {
-      ; in S1, menu goes back to root whenever stone is used
-      loop 9 {
-        ; menu 1> items 2> characters 3> item 4> use
-        loop 4 {
-          send {%cross% down}
-          send {%cross% up}
-        }
-        ; to 1st or 4th character
-        if (toSecond) {
-          send {%dright% down}
-          send {%dright% up}
-        }
-        ; character 1> confirm 2> close
-        loop 2 {
-          send {%cross% down}
-          send {%cross% up}
-        }
-      }
-      ; close menu of any depth
-      loop 4 {
-        send {%circle% down}
-        send {%circle% up}
-      }
+
+        ; choose try again and wait for revive delay
+        Send, {%cross% Down}
+        Send, {%cross% Up}
+        Sleep, 2000
     }
-
-    ; purposely lose fight until game over
-    doMoveAndLose(toggle)
-    while (isFinishState() && toggle) {
-      doFinish()
-      doMoveAndLose(toggle)
-    }
-
-    ; choose try again and wait for revive delay
-    send {%cross% down}
-    send {%cross% up}
-    sleep 2000
-  }
-  return
+    Return
 
 doMoveAndLose(toggle) {
-  ; move around until enemies encounter
-  while (not isFightState() && toggle) {
-    doMoveAround(200)
-  }
+    ; move around until enemies encounter
+    While (Not isFightState() And toggle) {
+        doMoveAround(200)
+    }
 
-  if (isS2) {
-    ; with Fire Lizard rune, there's a chance of winning the fight if all enemies die at the end of
-    ; the turn
-    send {%dup% down}
-    send {%dup% up}
-    loop 4 {
-      send {%cross% down}
-      send {%cross% up}
+    If (isS2) {
+        ; with Fire Lizard rune, there's a chance of winning the fight if all enemies die at the end
+        ; of the turn
+        Send, {%dup% Down}
+        Send, {%dup% Up}
+        Loop, 4 {
+            Send, {%cross% Down}
+            Send, {%cross% Up}
+        }
+        Sleep, 700
+    } Else {
+        ; with baloon glitch, any fight is always lost
+        Loop, 2 {
+            Send, {%cross% Down}
+            Send, {%cross% Up}
+        }
+        Sleep, 500
     }
-    sleep 700
-  } else {
-    ; with baloon glitch, any fight is always lost
-    loop 2 {
-      send {%cross% down}
-      send {%cross% up}
-    }
-    sleep 500
-  }
 }
