@@ -1,4 +1,6 @@
-; Core library is the base of all scripts.
+/*
+Core library is the base of all scripts.
+*/
 
 #NoEnv ; generally better performance
 #SingleInstance, Force ; faster testing
@@ -23,7 +25,9 @@ global scanFinishColor
 
 global lastFallbackColor
 
-; Load scan properties of Suikoden 1.
+/*
+Load scan properties of Suikoden 1.
+*/
 initializeS1() {
     scanEnemyColor := getPreference("Scans", "EnemyColor")
     scanFightPoint := getPreference("Scans", "S1FightPoint")
@@ -38,7 +42,9 @@ initializeS1() {
     scanFinishColor := coordinate3
 }
 
-; Load scan properties of Suikoden 2.
+/*
+Load scan properties of Suikoden 2.
+*/
 initializeS2() {
     scanEnemyColor := getPreference("Scans", "EnemyColor")
     scanFightPoint := getPreference("Scans", "S2FightPoint")
@@ -53,20 +59,26 @@ initializeS2() {
     scanFinishColor := coordinate3
 }
 
-; Check if fight point is valid.
+/*
+Check if fight point is valid.
+*/
 isFightState() {
     PixelGetColor, color, scanFightX, scanFightY
     Return color = scanFightColor
 }
 
-; Check if finish point is valid.
+/*
+Check if finish point is valid.
+*/
 isFinishState() {
     PixelGetColor, color, scanFinishX, scanFinishY
     Return color = scanFinishColor
 }
 
-; Check if the game has become stagnated, which usually happens in sudden FPS drop. This is done by
-; picking a color of any coordinate, then later check if the color is still in that coordinate.
+/*
+Check if the game has become stagnated, which usually happens in sudden FPS drop. This is done by
+picking a color of any coordinate, then later check if the color is still in that coordinate.
+*/
 isFallbackState() {
     PixelGetColor, color, scanFightX, scanFightY
     If (color = lastFallbackColor) {
@@ -77,7 +89,9 @@ isFallbackState() {
     Return False
 }
 
-; In any fight state, select Free Will.
+/*
+In any fight state, select Free Will.
+*/
 doFight() {
     Send, {%dup% Down}
     Send, {%dup% Up}
@@ -89,7 +103,9 @@ doFight() {
     Send, {%cross% Up}
 }
 
-; In Suikoden 1 finish state, close all dialogs.
+/*
+In Suikoden 1 finish state, close all dialogs.
+*/
 doFinishS1() {
     ; no need for looping in S1 because money and item gained box is the same
     Sleep, 100 ; money/item dialog animation
@@ -97,7 +113,9 @@ doFinishS1() {
     Send, {%cross% Up}
 }
 
-; In Suikoden 2 finish state, close all dialogs.
+/*
+In Suikoden 2 finish state, close all dialogs.
+*/
 doFinishS2() {
     ; party members lv 1> exp gained 2> money gained
     Loop, 2 {
@@ -112,8 +130,10 @@ doFinishS2() {
     }
 }
 
-; In Suikoden 1 stagnated state, press enter and back. Enter is neccessary because escape/bribe
-; confirmation dialog cannot be dismissed with back button.
+/*
+In Suikoden 1 stagnated state, press enter and back. Enter is neccessary because escape/bribe
+confirmation dialog cannot be dismissed with back button.
+*/
 doFallbackS1() {
     Send, {%cross% Down}
     Send, {%cross% Up}
@@ -121,8 +141,10 @@ doFallbackS1() {
     Send, {%circle% Up}
 }
 
-; In Suikoden 2 stagnated state, press enter and back. Enter is neccessary because escape/bribe
-; confirmation dialog cannot be dismissed with back button.
+/*
+In Suikoden 2 stagnated state, press enter and back. Enter is neccessary because escape/bribe
+confirmation dialog cannot be dismissed with back button.
+*/
 doFallbackS2() {
     Send, {%cross% Down}
     Send, {%cross% Up}
@@ -130,7 +152,9 @@ doFallbackS2() {
     Send, {%triangle% Up}
 }
 
-; Run horizontally to encounter enemies.
+/*
+Run horizontally to encounter enemies.
+*/
 doMoveAround(duration) {
     Send, {%circle% Down}
     Send, {%dleft% Down}
@@ -143,18 +167,24 @@ doMoveAround(duration) {
     Send, {%circle% Up}
 }
 
-; Get value from an INI file.
+/*
+Get value from an INI file.
+*/
 getPreference(section, key) {
     IniRead, value, preferences.ini, %section%, %key%
     Return value
 }
 
-; Set value to an INI file.
+/*
+Set value to an INI file.
+*/
 setPreference(section, key, value) {
     IniWrite, %value%, preferences.ini, %section%, %key%
 }
 
-; Toggle a boolean preference, also display an alert about current state.
+/*
+Toggle a boolean preference, also display an alert about current state.
+*/
 toggleModePreference(section, key, modeOnDesc, modeOffDesc) {
     value := getPreference(section, key)
     setPreference(section, key, !value)
@@ -165,7 +195,9 @@ toggleModePreference(section, key, modeOnDesc, modeOffDesc) {
     }
 }
 
-; Change icon in notification area.
+/*
+Change icon in notification area.
+*/
 setIcon(file) {
     path := Format("res/{1}.ico", file)
     Menu, Tray, Icon, %path%

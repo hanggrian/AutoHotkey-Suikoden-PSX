@@ -1,19 +1,21 @@
-; Leave just 1 or 2 enemies left (preferably the ones with weapon range L so they may not be
-; countered), then select which character to attack while the rest is defending.
-;
-; In an attempt to get a different loot, a different scenario must occur. Within the emulator
-; environment, repeatedly try to finish the enemy with different character. If no desired loot is
-; available, press `BackSpace` to make the entire party skip moves to try again.
-;
-; This script is particularly useful when trying to obtain loots from enemies that cannot be
-; encountered using conventional `Fight.ahk` script, e.g.:
-; - Any loot from bosses.
-; - In S1, Iron Boots from Highlands at Greenhill Forest #2.
-;
-; Game     : S1 & S2
-; Location : Any enemy-spawn area, preferably with wide horizontal area
+/*
+Leave just 1 or 2 enemies left (preferably the ones with weapon range L so they may not be
+countered), then select which character to attack while the rest is defending.
 
-#Include, libs/commons.ahk
+In an attempt to get a different loot, a different scenario must occur. Within the emulator
+environment, repeatedly try to finish the enemy with different character. If no desired loot is
+available, press `BackSpace` to make the entire party skip moves to try again.
+
+This script is particularly useful when trying to obtain loots from enemies that cannot be
+encountered using conventional `Fight.ahk` script, e.g.:
+- Any loot from bosses.
+- In S1, Iron Boots from Highlands at Greenhill Forest #2.
+
+Game     : S1 & S2
+Location : Any enemy-spawn area, preferably with wide horizontal area
+*/
+
+#Include, lib/commons.ahk
 
 setIconOff()
 MsgBox,, % "Loot (S1 & S2)"

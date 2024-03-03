@@ -1,12 +1,14 @@
-; Run around to fight encountered enemies.
-;
-; When targeted mode is enabled, the script will only fight enemies with registered coordinates,
-; which is helpful when looting certain items.
-;
-; Game     : S1 & S2
-; Location : Any enemy-spawn area, preferably with wide horizontal area
+/*
+Run around to fight encountered enemies.
 
-#Include, libs/commons.ahk
+When targeted mode is enabled, the script will only fight enemies with registered coordinates,
+which is helpful when looting certain items.
+
+Game     : S1 & S2
+Location : Any enemy-spawn area, preferably with wide horizontal area
+*/
+
+#Include, lib/commons.ahk
 
 setIconOff()
 MsgBox,, % "Fight (S1 & S2)"

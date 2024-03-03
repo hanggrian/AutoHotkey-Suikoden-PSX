@@ -1,17 +1,19 @@
-; Use 9 items to 1st or 2nd character, depending on mode. Then run around to encounter enemies and
-; deliberately lose the fight, returning to last checkpoint and repeat the processs.
-;
-; In S1, items are held by 1st character. Party characters must all have 3 balloons. Change mode to
-; 2th for characters that has fixed equipment.
-;
-; In S2, items are held by party inventory. Party characters must all have 1 HP and Fire Lizard Rune
-; attached to their weapons. It's best to detach all non-weapon runes as certain runes (Double Beat,
-; Draining, etc.) may prolong the process. Change mode to 2th for non-human characters.
-;
-; Game     : S1 & S2
-; Location : Any enemy-spawn area with save point (e.g., Soniere Prison in S1, Banner Pass in S2)
+/*
+Use 9 items to 1st or 2nd character, depending on mode. Then run around to encounter enemies and
+deliberately lose the fight, returning to last checkpoint and repeat the processs.
 
-#Include, libs/commons.ahk
+In S1, items are held by 1st character. Party characters must all have 3 balloons. Change mode to
+2th for characters that has fixed equipment.
+
+In S2, items are held by party inventory. Party characters must all have 1 HP and Fire Lizard Rune
+attached to their weapons. It's best to detach all non-weapon runes as certain runes (Double Beat,
+Draining, etc.) may prolong the process. Change mode to 2th for non-human characters.
+
+Game     : S1 & S2
+Location : Any enemy-spawn area with save point (e.g., Soniere Prison in S1, Banner Pass in S2)
+*/
+
+#Include, lib/commons.ahk
 
 setIconOff()
 MsgBox,, % "Abuse Stat Stones Glitch (S1 & S2)"

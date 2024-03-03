@@ -1,12 +1,14 @@
-; Roll the dice and fight scripted enemies.
-;
-; In case of reaching Kirinji, the game becomes stagnated. But in this case, the fallback trigger is
-; return to original point.
-;
-; Game     : S1
-; Location : Just below entrance of Big Wheel in Kouan
+/*
+Roll the dice and fight scripted enemies.
 
-#Include, libs/core.ahk
+In case of reaching Kirinji, the game becomes stagnated. But in this case, the fallback trigger is
+return to original point.
+
+Game     : S1
+Location : Just below entrance of Big Wheel in Kouan
+*/
+
+#Include, lib/core.ahk
 
 setIcon("icon_s1_off")
 MsgBox,, % "Farm Fortune Rune Piece (S1)"

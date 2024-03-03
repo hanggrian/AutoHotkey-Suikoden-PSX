@@ -1,13 +1,15 @@
-; Kill highlands spawned by Rowd and repeatedly refuse to jump. After 108 iterations, a fabled
-; colored intro should appear.
-;
-; Game settings `Message Speed` must be set to `Fast`. When the health of Riou & Jowy are critical,
-; pause the script to use Medicine. The counter will not be reset when the script is continued.
-;
-; Game     : S2
-; Location : Highland Camp prologue
+/*
+Kill highlands spawned by Rowd and repeatedly refuse to jump. After 108 iterations, a fabled
+colored intro should appear.
 
-#Include, libs/core.ahk
+Game settings `Message Speed` must be set to `Fast`. When the health of Riou & Jowy are critical,
+pause the script to use Medicine. The counter will not be reset when the script is continued.
+
+Game     : S2
+Location : Highland Camp prologue
+*/
+
+#Include, lib/core.ahk
 
 setIcon("icon_s2_off")
 MsgBox,, % "View Colored Intro (S2)"

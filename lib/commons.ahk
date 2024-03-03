@@ -1,10 +1,14 @@
-; Commons library is used for when a script supports both S1 and S2.
+/*
+Commons library is used for when a script supports both S1 and S2.
+*/
 
-#Include, libs/core.ahk
+#Include, lib/core.ahk
 
 global isS2
 
-; Load scan properties of any.
+/*
+Load scan properties of any.
+*/
 initialize() {
     isS2 := getPreference("General", "S2")
     If (Not isS2) {
@@ -14,7 +18,9 @@ initialize() {
     }
 }
 
-; In any finish state, close all dialogs.
+/*
+In any finish state, close all dialogs.
+*/
 doFinish() {
     If (Not isS2) {
         doFinishS1()
@@ -23,7 +29,9 @@ doFinish() {
     }
 }
 
-; In any stagnated state, press enter and back.
+/*
+In any stagnated state, press enter and back.
+*/
 doFallback() {
     If (Not isS2) {
         doFallbackS1()
@@ -32,7 +40,9 @@ doFallback() {
     }
 }
 
-; Change icon in notification area to `off`.
+/*
+Change icon in notification area to `off`.
+*/
 setIconOff() {
     isS2 := getPreference("General", "S2")
     If (isS2) {
@@ -42,7 +52,9 @@ setIconOff() {
     }
 }
 
-; Change icon in notification area to `on`.
+/*
+Change icon in notification area to `on`.
+*/
 setIconOn() {
     isS2 := getPreference("General", "S2")
     If (isS2) {
